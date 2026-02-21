@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DRAS — Redefine the Sky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#000;
+  --white:#fff;
+  --gray:#888;
+  --gray2:#555;
+  --gray3:#1a1a1a;
+  --gray4:#111;
+  --accent:#e8e8e8;
+  --red:#e63946;
+  --font:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--black);color:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#333}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:52px;
+  background:transparent;
+  transition:background .3s;
+}
+nav.scrolled{background:rgba(0,0,0,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;text-decoration:none;
+}
+.nav-logo img{height:28px;width:auto;object-fit:contain}
+.nav-logo-text{
+  font-size:18px;font-weight:600;letter-spacing:2px;
+  color:var(--white);text-transform:uppercase;
+  /* shown only if no logo image loads */
+}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{
+  font-size:13px;font-weight:400;color:rgba(255,255,255,.75);
+  text-decoration:none;letter-spacing:.3px;
+  transition:color .2s;
+}
+.nav-links a:hover{color:#fff}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-store{
+  font-size:13px;color:rgba(255,255,255,.75);
+  text-decoration:none;transition:color .2s;
+}
+.nav-store:hover{color:#fff}
+.nav-cart{
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,.75);font-size:18px;
+  display:flex;align-items:center;
+}
+
+/* ── HERO ── */
+.hero{
+  position:relative;width:100%;height:100vh;min-height:600px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 30%, #0a0a0a 0%, #000 70%);
+  z-index:0;
+}
+/* Drone SVG art in hero */
+.hero-drone{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-56%);
+  z-index:1;
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translate(-50%,-56%) translateY(0)}
+  50%{transform:translate(-50%,-56%) translateY(-18px)}
+}
+.hero-glow{
+  position:absolute;top:38%;left:50%;
+  transform:translate(-50%,-50%);
+  width:700px;height:300px;
+  background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 70%);
+  z-index:0;pointer-events:none;
+}
+.hero-shadow{
+  position:absolute;top:62%;left:50%;
+  transform:translate(-50%,-50%);
+  width:500px;height:40px;
+  background:radial-gradient(ellipse,rgba(255,255,255,.07) 0%,transparent 70%);
+  z-index:1;
+  animation:shadowPulse 6s ease-in-out infinite;
+}
+@keyframes shadowPulse{
+  0%,100%{opacity:1;transform:translate(-50%,-50%) scaleX(1)}
+  50%{opacity:.5;transform:translate(-50%,-50%) scaleX(.85)}
+}
+.hero-content{
+  position:relative;z-index:2;
+  text-align:center;padding-bottom:72px;
+  width:100%;
+}
+.hero-eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gray);
+  margin-bottom:14px;
+}
+.hero-product{font-size:13px;font-weight:400;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.hero h1{
+  font-size:clamp(48px,7vw,96px);
+  font-weight:300;letter-spacing:-1.5px;
+  line-height:1;color:var(--white);
+  margin-bottom:12px;
+}
+.hero h1 strong{font-weight:600}
+.hero-tagline{
+  font-size:clamp(14px,1.5vw,17px);font-weight:300;
+  color:rgba(255,255,255,.6);letter-spacing:.3px;
+  margin-bottom:36px;
+}
+.hero-ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-learn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:500;color:var(--white);
+  text-decoration:none;letter-spacing:.3px;
+  padding:9px 22px;border:1px solid rgba(255,255,255,.3);
+  border-radius:4px;transition:border-color .2s,background .2s;
+}
+.btn-learn:hover{border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.06)}
+.btn-buy{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:500;
+  color:var(--black);background:var(--white);
+  text-decoration:none;letter-spacing:.3px;
+  padding:9px 22px;border:1px solid transparent;
+  border-radius:4px;transition:opacity .2s;
+}
+.btn-buy:hover{opacity:.88}
+
+/* ── PRODUCT SECTIONS ── */
+.product-hero{
+  position:relative;width:100%;height:100vh;min-height:580px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  overflow:hidden;
+}
+.product-hero-bg{
+  position:absolute;inset:0;z-index:0;
+}
+.ph-dark .product-hero-bg{background:#000}
+.ph-mid  .product-hero-bg{background:#0a0a0a}
+.ph-gray .product-hero-bg{background:#0f0f0f}
+
+/* ambient gradient per section */
+.ph-1 .product-hero-bg{background:radial-gradient(ellipse at 50% 0%,#0d1117 0%,#000 65%)}
+.ph-2 .product-hero-bg{background:radial-gradient(ellipse at 30% 50%,#0b0b0b 0%,#000 70%)}
+.ph-3 .product-hero-bg{background:radial-gradient(ellipse at 70% 40%,#100a00 0%,#000 70%)}
+
+.product-drone{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-55%);
+  z-index:1;
+}
+.product-content{
+  position:relative;z-index:2;
+  text-align:center;padding-bottom:64px;width:100%;
+}
+.product-category{
+  font-size:11px;font-weight:500;letter-spacing:3.5px;
+  text-transform:uppercase;color:var(--gray);margin-bottom:10px;
+}
+.product-name{
+  font-size:clamp(36px,6vw,80px);
+  font-weight:300;letter-spacing:-1px;line-height:1;
+  color:var(--white);margin-bottom:8px;
+}
+.product-name strong{font-weight:600}
+.product-sub{
+  font-size:clamp(13px,1.4vw,16px);font-weight:300;
+  color:rgba(255,255,255,.55);letter-spacing:.2px;margin-bottom:28px;
+}
+.product-specs-row{
+  display:flex;justify-content:center;gap:40px;
+  margin-bottom:32px;flex-wrap:wrap;
+}
+.spec-item{text-align:center}
+.spec-val{
+  font-size:clamp(18px,2.5vw,28px);font-weight:300;
+  color:var(--white);letter-spacing:-0.5px;line-height:1;
+}
+.spec-unit{font-size:12px;font-weight:500;color:var(--gray)}
+.spec-label{font-size:11px;font-weight:400;color:var(--gray);letter-spacing:.5px;margin-top:4px}
+
+/* ── SPEC DIVIDER ── */
+.spec-divider{
+  display:flex;justify-content:center;align-items:stretch;
+  gap:0;background:var(--gray3);
+  border-top:1px solid #222;border-bottom:1px solid #222;
+}
+.spec-col{
+  flex:1;padding:44px 32px;text-align:center;
+  border-right:1px solid #222;
+}
+.spec-col:last-child{border-right:none}
+.spec-col-val{
+  font-size:clamp(28px,4vw,52px);font-weight:300;
+  letter-spacing:-1px;color:var(--white);margin-bottom:8px;
+}
+.spec-col-label{
+  font-size:12px;font-weight:400;color:var(--gray);
+  letter-spacing:1.5px;text-transform:uppercase;
+}
+
+/* ── FEATURES SECTION ── */
+.features-section{background:#000;padding:100px 0}
+.features-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.section-header{text-align:center;margin-bottom:72px}
+.section-eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gray);margin-bottom:20px;
+}
+.section-title{
+  font-size:clamp(28px,4vw,52px);font-weight:300;
+  letter-spacing:-1px;color:var(--white);line-height:1.1;
+}
+.section-title strong{font-weight:600}
+.features-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:#1a1a1a;border:1px solid #1a1a1a;
+}
+.feature-card{
+  background:#000;padding:52px 40px;
+  transition:background .3s;
+}
+.feature-card:hover{background:#0a0a0a}
+.feature-icon{
+  width:44px;height:44px;margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;
+}
+.feature-title{
+  font-size:18px;font-weight:500;letter-spacing:-.3px;
+  color:var(--white);margin-bottom:12px;
+}
+.feature-desc{
+  font-size:14px;font-weight:300;color:var(--gray);
+  line-height:1.7;
+}
+
+/* ── CINEMATIC BANNER ── */
+.cinematic{
+  position:relative;width:100%;height:60vh;min-height:400px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.cinematic-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#050508 0%,#0a0a12 50%,#050508 100%);
+}
+.cinematic-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 60%);
+}
+.cinematic-content{
+  position:relative;z-index:2;text-align:center;padding:0 40px;
+}
+.cinematic-label{
+  font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gray);margin-bottom:16px;
+}
+.cinematic-title{
+  font-size:clamp(32px,5vw,68px);font-weight:300;
+  letter-spacing:-1.5px;color:var(--white);margin-bottom:20px;
+}
+.cinematic-title strong{font-weight:600}
+.cinematic-sub{
+  font-size:15px;font-weight:300;color:rgba(255,255,255,.5);margin-bottom:32px;
+}
+
+/* ── COMPARE TABLE ── */
+.compare-section{background:#000;padding:100px 0;border-top:1px solid #1a1a1a}
+.compare-inner{max-width:960px;margin:0 auto;padding:0 40px}
+.compare-table{width:100%;border-collapse:collapse;margin-top:56px}
+.compare-table th{
+  padding:16px 24px;font-size:11px;font-weight:500;
+  letter-spacing:2px;text-transform:uppercase;color:var(--gray);
+  text-align:center;border-bottom:1px solid #1f1f1f;
+}
+.compare-table th:first-child{text-align:left}
+.compare-table td{
+  padding:18px 24px;font-size:14px;font-weight:300;
+  color:rgba(255,255,255,.8);text-align:center;
+  border-bottom:1px solid #111;
+}
+.compare-table td:first-child{
+  text-align:left;color:var(--gray);font-size:12px;
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.compare-table tr:hover td{background:rgba(255,255,255,.02)}
+.compare-highlight th{color:var(--white)!important}
+.check-yes{color:var(--white)}
+.check-no{color:#333}
+
+/* ── NEWSLETTER / CTA BANNER ── */
+.cta-banner{
+  background:#fff;padding:80px 40px;text-align:center;
+}
+.cta-banner h2{
+  font-size:clamp(24px,3.5vw,44px);font-weight:600;
+  letter-spacing:-1px;color:#000;margin-bottom:12px;
+}
+.cta-banner p{font-size:15px;color:#555;margin-bottom:32px}
+.cta-email{
+  display:flex;justify-content:center;gap:0;max-width:420px;margin:0 auto;
+}
+.cta-email input{
+  flex:1;padding:12px 18px;font-size:14px;font-family:var(--font);
+  background:#f5f5f5;border:1px solid #ddd;border-right:none;
+  border-radius:4px 0 0 4px;outline:none;color:#000;
+}
+.cta-email button{
+  padding:12px 22px;background:#000;color:#fff;border:none;
+  font-size:13px;font-weight:500;font-family:var(--font);
+  letter-spacing:.3px;cursor:pointer;border-radius:0 4px 4px 0;
+  transition:opacity .2s;
+}
+.cta-email button:hover{opacity:.85}
+
+/* ── WHERE TO BUY ── */
+.buy-section{background:#000;padding:80px 0;border-top:1px solid #1a1a1a}
+.buy-inner{max-width:960px;margin:0 auto;padding:0 40px;text-align:center}
+.buy-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:#1a1a1a;margin-top:56px;
+}
+.buy-card{
+  background:#000;padding:44px 32px;text-align:center;
+  transition:background .3s;cursor:pointer;
+}
+.buy-card:hover{background:#0d0d0d}
+.buy-icon{font-size:32px;margin-bottom:20px}
+.buy-title{font-size:15px;font-weight:500;color:var(--white);margin-bottom:8px}
+.buy-desc{font-size:13px;font-weight:300;color:var(--gray);line-height:1.6}
+.buy-link{
+  display:inline-block;margin-top:16px;
+  font-size:13px;font-weight:400;color:rgba(255,255,255,.6);
+  text-decoration:none;letter-spacing:.3px;
+  transition:color .2s;
+}
+.buy-link:hover{color:#fff}
+
+/* ── FOOTER ── */
+footer{
+  background:#000;border-top:1px solid #1a1a1a;
+  padding:64px 40px 32px;
+}
+.footer-inner{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:200px 1fr 1fr 1fr 1fr;
+  gap:48px;padding-bottom:48px;border-bottom:1px solid #1a1a1a;
+}
+.footer-brand{}
+.footer-logo-wrap{
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.footer-logo-wrap img{height:24px;width:auto;object-fit:contain}
+.footer-logo-name{
+  font-size:16px;font-weight:600;letter-spacing:3px;
+  color:var(--white);text-transform:uppercase;
+}
+.footer-tagline{font-size:12px;color:var(--gray);line-height:1.7;margin-top:8px}
+.footer-col h4{
+  font-size:11px;font-weight:500;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gray);margin-bottom:20px;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col a{
+  font-size:13px;font-weight:300;color:rgba(255,255,255,.5);
+  text-decoration:none;transition:color .2s;
+}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:1200px;margin:24px auto 0;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-copy{font-size:12px;color:#444}
+.footer-legal{display:flex;gap:24px}
+.footer-legal a{font-size:12px;color:#444;text-decoration:none;transition:color .2s}
+.footer-legal a:hover{color:#888}
+.footer-socials{display:flex;gap:20px}
+.footer-socials a{font-size:18px;color:#444;text-decoration:none;transition:color .2s}
+.footer-socials a:hover{color:#fff}
+
+/* ── SVG DRONES ── */
+.drone-svg{filter:drop-shadow(0 0 40px rgba(255,255,255,.08))}
+
+/* ── SCROLL INDICATOR ── */
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-text{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.3);text-transform:uppercase}
+.scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,rgba(255,255,255,.3),transparent)}
+
+/* ── VIDEO STRIP ── */
+.video-strip{
+  background:#050505;padding:80px 0;border-top:1px solid #111;border-bottom:1px solid #111;
+}
+.video-strip-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.video-strip-label{
+  font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gray);margin-bottom:40px;text-align:center;
+}
+.video-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.video-thumb{
+  aspect-ratio:16/10;background:#0a0a0a;border:1px solid #1a1a1a;
+  border-radius:6px;overflow:hidden;position:relative;cursor:pointer;
+  transition:border-color .3s;
+}
+.video-thumb:hover{border-color:#333}
+.video-thumb-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.play-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.1);backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;transition:background .2s;
+}
+.video-thumb:hover .play-btn{background:rgba(255,255,255,.2)}
+.video-label{
+  position:absolute;bottom:12px;left:12px;
+  font-size:11px;font-weight:500;color:rgba(255,255,255,.6);
+  letter-spacing:1px;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  .features-grid{grid-template-columns:1fr}
+  .compare-inner{padding:0 20px}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:32px}
+  .buy-grid{grid-template-columns:1fr}
+  .video-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .spec-divider{flex-direction:column}
+  .spec-col{border-right:none;border-bottom:1px solid #222}
+  .hero-ctas{flex-direction:column;align-items:center}
+  .product-specs-row{gap:24px}
+}
+
+/* ── PAGE LOAD ── */
+.page-fade{animation:pageFade .8s ease forwards}
+@keyframes pageFade{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body class="page-fade">
+
+<!-- ══ NAV ═════════════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <!-- Replace src with your actual logo file -->
+    <img src="logo.png" alt="DRAS" onerror="this.style.display='none'"/>
+    <span class="nav-logo-text">DRAS</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#drones">Drones</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#specs">Specs</a></li>
+    <li><a href="#buy">Where to Buy</a></li>
+    <li><a href="#support">Support</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#buy" class="nav-store">Store</a>
+    <button class="nav-cart" aria-label="Cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+
+  <!-- Flagship Drone SVG -->
+  <div class="hero-drone">
+    <svg class="drone-svg" width="680" height="300" viewBox="0 0 680 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Body -->
+      <rect x="290" y="125" width="100" height="50" rx="8" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+      <rect x="305" y="132" width="70" height="36" rx="5" fill="#111"/>
+      <!-- Camera gimbal -->
+      <circle cx="340" cy="178" r="14" fill="#0f0f0f" stroke="#2a2a2a" stroke-width="1"/>
+      <circle cx="340" cy="178" r="8" fill="#1a1a1a"/>
+      <circle cx="340" cy="178" r="4" fill="#222"/>
+      <!-- Arms L -->
+      <rect x="200" y="143" width="90" height="6" rx="3" fill="#1a1a1a" stroke="#2a2a2a" stroke-width=".8" transform="rotate(-12 200 146)"/>
+      <rect x="200" y="150" width="90" height="6" rx="3" fill="#1a1a1a" stroke="#2a2a2a" stroke-width=".8" transform="rotate(12 200 150)"/>
+      <!-- Arms R -->
+      <rect x="390" y="143" width="90" height="6" rx="3" fill="#1a1a1a" stroke="#2a2a2a" stroke-width=".8" transform="rotate(168 480 146)"/>
+      <rect x="390" y="150" width="90" height="6" rx="3" fill="#1a1a1a" stroke="#2a2a2a" stroke-width=".8" transform="rotate(192 480 150)"/>
+      <!-- Motor FL -->
+      <ellipse cx="178" cy="130" rx="22" ry="8" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+      <ellipse cx="178" cy="128" rx="22" ry="7" fill="#0a0a0a" stroke="#333" stroke-width=".8"/>
+      <!-- Motor FR -->
+      <ellipse cx="502" cy="130" rx="22" ry="8" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+      <ellipse cx="502" cy="128" rx="22" ry="7" fill="#0a0a0a" stroke="#333" stroke-width=".8"/>
+      <!-- Motor BL -->
+      <ellipse cx="195" cy="170" rx="20" ry="7" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+      <ellipse cx="195" cy="168" rx="20" ry="6" fill="#0a0a0a" stroke="#333" stroke-width=".8"/>
+      <!-- Motor BR -->
+      <ellipse cx="485" cy="170" rx="20" ry="7" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+      <ellipse cx="485" cy="168" rx="20" ry="6" fill="#0a0a0a" stroke="#333" stroke-width=".8"/>
+      <!-- Propellers FL -->
+      <ellipse cx="178" cy="128" rx="52" ry="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)" stroke-width=".5" style="animation:spin 1.2s linear infinite"/>
+      <!-- Propellers FR -->
+      <ellipse cx="502" cy="128" rx="52" ry="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)" stroke-width=".5" style="animation:spin 1.2s linear infinite reverse"/>
+      <!-- Propellers BL -->
+      <ellipse cx="195" cy="168" rx="46" ry="4.5" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width=".5" style="animation:spin .9s linear infinite reverse"/>
+      <!-- Propellers BR -->
+      <ellipse cx="485" cy="168" rx="46" ry="4.5" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.07)" stroke-width=".5" style="animation:spin .9s linear infinite"/>
+      <!-- LED accents -->
+      <circle cx="178" cy="128" r="2" fill="#e63946" opacity=".7"/>
+      <circle cx="502" cy="128" r="2" fill="#22c55e" opacity=".7"/>
+      <!-- Antenna -->
+      <line x1="340" y1="125" x2="340" y2="105" stroke="#2a2a2a" stroke-width="1"/>
+      <circle cx="340" cy="103" r="2" fill="#3a3a3a"/>
+      <!-- Status light -->
+      <rect x="330" y="127" width="20" height="3" rx="1.5" fill="#1e3a8a" opacity=".6"/>
+    </svg>
+  </div>
+
+  <div class="hero-shadow"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">New · 2025</div>
+    <div class="hero-product">DRAS Apex Pro</div>
+    <h1><strong>Apex</strong> Pro</h1>
+    <div class="hero-tagline">Redefine the Sky. Master Every Frame.</div>
+    <div class="hero-ctas">
+      <a href="#specs" class="btn-learn">Learn More</a>
+      <a href="#buy" class="btn-buy">Buy Now</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-text">Scroll</div>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ APEX PRO SPECS STRIP ════════════════════════════════ -->
+<div class="spec-divider">
+  <div class="spec-col">
+    <div class="spec-col-val">48 MP</div>
+    <div class="spec-col-label">Main Camera</div>
+  </div>
+  <div class="spec-col">
+    <div class="spec-col-val">46 min</div>
+    <div class="spec-col-label">Max Flight Time</div>
+  </div>
+  <div class="spec-col">
+    <div class="spec-col-val">20 km</div>
+    <div class="spec-col-label">Transmission Range</div>
+  </div>
+  <div class="spec-col">
+    <div class="spec-col-val">15 m/s</div>
+    <div class="spec-col-label">Max Wind Resistance</div>
+  </div>
+  <div class="spec-col">
+    <div class="spec-col-val">4K/120</div>
+    <div class="spec-col-label">Video Resolution</div>
+  </div>
+</div>
+
+<!-- ══ PRODUCT 2 — DRAS SCOUT ══════════════════════════════ -->
+<section class="product-hero ph-1" id="drones">
+  <div class="product-hero-bg"></div>
+
+  <!-- Scout Drone (smaller, foldable) -->
+  <div class="product-drone" style="animation:float 5s ease-in-out infinite">
+    <svg class="drone-svg" width="520" height="260" viewBox="0 0 520 260" fill="none">
+      <!-- Foldable body -->
+      <rect x="220" y="108" width="80" height="44" rx="10" fill="#1c1c1c" stroke="#2d2d2d" stroke-width="1"/>
+      <rect x="234" y="116" width="52" height="28" rx="4" fill="#111"/>
+      <!-- Camera -->
+      <ellipse cx="260" cy="155" r="11" fill="#0f0f0f" stroke="#2a2a2a" stroke-width="1"/>
+      <ellipse cx="260" cy="155" r="6" fill="#1a1a1a"/>
+      <!-- Folded arms L -->
+      <path d="M220 118 Q180 108 148 98" stroke="#2a2a2a" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M220 140 Q180 152 148 162" stroke="#2a2a2a" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <!-- Folded arms R -->
+      <path d="M300 118 Q340 108 372 98" stroke="#2a2a2a" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M300 140 Q340 152 372 162" stroke="#2a2a2a" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <!-- Motors -->
+      <circle cx="148" cy="98" r="12" fill="#111" stroke="#333" stroke-width="1"/>
+      <circle cx="148" cy="162" r="11" fill="#111" stroke="#333" stroke-width="1"/>
+      <circle cx="372" cy="98" r="12" fill="#111" stroke="#333" stroke-width="1"/>
+      <circle cx="372" cy="162" r="11" fill="#111" stroke="#333" stroke-width="1"/>
+      <!-- Props -->
+      <ellipse cx="148" cy="96" rx="42" ry="4.5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width=".5" style="animation:spin 1s linear infinite"/>
+      <ellipse cx="148" cy="160" rx="38" ry="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width=".5" style="animation:spin 1s linear infinite reverse"/>
+      <ellipse cx="372" cy="96" rx="42" ry="4.5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width=".5" style="animation:spin 1s linear infinite reverse"/>
+      <ellipse cx="372" cy="160" rx="38" ry="4" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width=".5" style="animation:spin 1s linear infinite"/>
+      <!-- Status LEDs -->
+      <circle cx="148" cy="96" r="2" fill="#3b82f6" opacity=".8"/>
+      <circle cx="372" cy="96" r="2" fill="#3b82f6" opacity=".8"/>
+    </svg>
+  </div>
+
+  <div class="product-content">
+    <div class="product-category">Travel · Compact</div>
+    <div class="product-name"><strong>DRAS</strong> Scout</div>
+    <div class="product-sub">Pocket-Sized Power. Anywhere Adventures.</div>
+    <div class="product-specs-row">
+      <div class="spec-item">
+        <div class="spec-val">34<span class="spec-unit"> min</span></div>
+        <div class="spec-label">Flight Time</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">249<span class="spec-unit"> g</span></div>
+        <div class="spec-label">Weight</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">4K<span class="spec-unit">/60</span></div>
+        <div class="spec-label">Video</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">12<span class="spec-unit"> km</span></div>
+        <div class="spec-label">Range</div>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#" class="btn-learn">Learn More</a>
+      <a href="#buy" class="btn-buy">Buy Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCT 3 — DRAS STORM FPV ════════════════════════ -->
+<section class="product-hero ph-3">
+  <div class="product-hero-bg"></div>
+
+  <!-- FPV racing drone -->
+  <div class="product-drone" style="animation:float 4s ease-in-out infinite;animation-delay:.5s">
+    <svg class="drone-svg" width="460" height="260" viewBox="0 0 460 260" fill="none">
+      <!-- X-frame body -->
+      <rect x="200" y="112" width="60" height="36" rx="6" fill="#1c1c1c" stroke="#2a2a2a" stroke-width="1"/>
+      <!-- FPV camera front -->
+      <rect x="213" y="118" width="24" height="18" rx="3" fill="#0a0a0a" stroke="#333" stroke-width=".8"/>
+      <circle cx="225" cy="127" r="7" fill="#050505" stroke="#3a3a3a" stroke-width=".8"/>
+      <circle cx="225" cy="127" r="3.5" fill="#1a1a1a"/>
+      <!-- X arms diagonal -->
+      <line x1="210" y1="120" x2="110" y2="90" stroke="#2a2a2a" stroke-width="7" stroke-linecap="round"/>
+      <line x1="250" y1="120" x2="350" y2="90" stroke="#2a2a2a" stroke-width="7" stroke-linecap="round"/>
+      <line x1="210" y1="140" x2="110" y2="170" stroke="#2a2a2a" stroke-width="7" stroke-linecap="round"/>
+      <line x1="250" y1="140" x2="350" y2="170" stroke="#2a2a2a" stroke-width="7" stroke-linecap="round"/>
+      <!-- Motors -->
+      <circle cx="108" cy="89" r="14" fill="#111" stroke="#333" stroke-width="1"/>
+      <circle cx="352" cy="89" r="14" fill="#111" stroke="#333" stroke-width="1"/>
+      <circle cx="108" cy="171" r="14" fill="#111" stroke="#333" stroke-width="1"/>
+      <circle cx="352" cy="171" r="14" fill="#111" stroke="#333" stroke-width="1"/>
+      <!-- Props -->
+      <ellipse cx="108" cy="87" rx="46" ry="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width=".6" style="animation:spin .7s linear infinite"/>
+      <ellipse cx="352" cy="87" rx="46" ry="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width=".6" style="animation:spin .7s linear infinite reverse"/>
+      <ellipse cx="108" cy="169" rx="46" ry="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width=".6" style="animation:spin .7s linear infinite reverse"/>
+      <ellipse cx="352" cy="169" rx="46" ry="5" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width=".6" style="animation:spin .7s linear infinite"/>
+      <!-- Status LEDs accent color -->
+      <circle cx="108" cy="87" r="2.5" fill="#f97316" opacity=".9"/>
+      <circle cx="352" cy="87" r="2.5" fill="#f97316" opacity=".9"/>
+      <circle cx="108" cy="169" r="2.5" fill="#f97316" opacity=".9"/>
+      <circle cx="352" cy="169" r="2.5" fill="#f97316" opacity=".9"/>
+      <!-- Vtx antenna -->
+      <line x1="230" y1="112" x2="230" y2="88" stroke="#2a2a2a" stroke-width="1.5"/>
+      <line x1="230" y1="88" x2="248" y2="72" stroke="#2a2a2a" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="product-content">
+    <div class="product-category">FPV · Racing</div>
+    <div class="product-name"><strong>DRAS</strong> Storm</div>
+    <div class="product-sub">Built for Speed. Born to Race.</div>
+    <div class="product-specs-row">
+      <div class="spec-item">
+        <div class="spec-val">140+<span class="spec-unit"> km/h</span></div>
+        <div class="spec-label">Top Speed</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">1080<span class="spec-unit">/120</span></div>
+        <div class="spec-label">FPV Feed</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">22<span class="spec-unit"> min</span></div>
+        <div class="spec-label">Flight Time</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">6 km</div>
+        <div class="spec-label">Range</div>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#" class="btn-learn">Learn More</a>
+      <a href="#buy" class="btn-buy">Buy Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ═════════════════════════════════════════════ -->
+<section class="features-section" id="features">
+  <div class="features-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Engineering Excellence</div>
+      <div class="section-title">Powerful technology.<br><strong>Precise by design.</strong></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.2.4.312.845.312 1.066 0 .221-.112.666-.313 1.066M3.812 10.934C3.612 11.334 3.5 11.779 3.5 12c0 .221.112.666.313 1.066M15.536 8.464a5 5 0 010 7.072M8.464 15.536a5 5 0 010-7.072M18.364 5.636a9 9 0 010 12.728M5.636 18.364a9 9 0 010-12.728"/></svg>
+        </div>
+        <div class="feature-title">O4 Transmission</div>
+        <div class="feature-desc">Our proprietary 20 km video transmission delivers crystal-clear 4K live feeds with imperceptible latency, even in congested signal environments.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="feature-title">Tri-Directional Obstacle Sensing</div>
+        <div class="feature-desc">Advanced APAS system detects and avoids obstacles across forward, backward, and lateral axes. Fly confidently in complex environments.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="feature-title">ActiveTrack 6.0</div>
+        <div class="feature-desc">DRAS's subject-tracking AI identifies, locks, and follows any subject automatically — whether sprinting, cycling, or boarding steep terrain.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="feature-title">48 MP Hasselblad Sensor</div>
+        <div class="feature-desc">Color-tuned in partnership with Hasselblad. Capture stills with exceptional dynamic range and videos in D-Log M for cinematic post-processing.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+        </div>
+        <div class="feature-title">46-Minute Flight Time</div>
+        <div class="feature-desc">Intelligent Power Management extends battery life so you capture the moments that matter, from golden hour to blue hour and beyond.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feature-title">Return to Home</div>
+        <div class="feature-desc">Precision landing with centimeter-level accuracy. DRAS learns your takeoff point and navigates home safely, even without GPS signal.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CINEMATIC BANNER ══════════════════════════════════════ -->
+<div class="cinematic">
+  <div class="cinematic-bg"></div>
+  <!-- Decorative grid lines -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.04" viewBox="0 0 1440 400" preserveAspectRatio="none">
+    <line x1="0" y1="200" x2="1440" y2="200" stroke="white" stroke-width=".5"/>
+    <line x1="720" y1="0" x2="720" y2="400" stroke="white" stroke-width=".5"/>
+    <line x1="0" y1="0" x2="1440" y2="400" stroke="white" stroke-width=".3"/>
+    <line x1="1440" y1="0" x2="0" y2="400" stroke="white" stroke-width=".3"/>
+    <circle cx="720" cy="200" r="150" stroke="white" stroke-width=".5" fill="none"/>
+    <circle cx="720" cy="200" r="80" stroke="white" stroke-width=".5" fill="none"/>
+  </svg>
+  <div class="cinematic-overlay"></div>
+  <div class="cinematic-content">
+    <div class="cinematic-label">Standing at the Forefront</div>
+    <div class="cinematic-title">Engineered for <strong>Excellence.</strong><br>Designed for the <strong>Sky.</strong></div>
+    <div class="cinematic-sub">Every DRAS drone is precision-built to redefine what's possible from above.</div>
+    <a href="#features" class="btn-learn">Explore the Technology</a>
+  </div>
+</div>
+
+<!-- ══ VIDEO STRIP ═══════════════════════════════════════════ -->
+<div class="video-strip">
+  <div class="video-strip-inner">
+    <div class="video-strip-label">Captured with DRAS</div>
+    <div class="video-grid">
+      <div class="video-thumb">
+        <div class="video-thumb-bg" style="background:linear-gradient(135deg,#0a0e1a,#0d1523)">
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-label">Apex Pro · 4K/120</div>
+      </div>
+      <div class="video-thumb">
+        <div class="video-thumb-bg" style="background:linear-gradient(135deg,#0d1a0a,#122010)">
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-label">Scout · Forest Run</div>
+      </div>
+      <div class="video-thumb">
+        <div class="video-thumb-bg" style="background:linear-gradient(135deg,#1a0d00,#221508)">
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-label">Storm · Race Day</div>
+      </div>
+      <div class="video-thumb">
+        <div class="video-thumb-bg" style="background:linear-gradient(135deg,#0f0a1a,#160f22)">
+          <div class="play-btn">▶</div>
+        </div>
+        <div class="video-label">Apex Pro · Golden Hour</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMPARE TABLE ══════════════════════════════════════════ -->
+<section class="compare-section" id="specs">
+  <div class="compare-inner">
+    <div class="section-header">
+      <div class="section-eyebrow">Compare</div>
+      <div class="section-title">Find your <strong>perfect drone.</strong></div>
+    </div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="compare-highlight">DRAS Apex Pro</th>
+          <th>DRAS Scout</th>
+          <th>DRAS Storm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Max Flight Time</td>
+          <td>46 min</td>
+          <td>34 min</td>
+          <td>22 min</td>
+        </tr>
+        <tr>
+          <td>Camera</td>
+          <td>48 MP, 1" CMOS</td>
+          <td>12 MP, 1/2"</td>
+          <td>4K Action Cam</td>
+        </tr>
+        <tr>
+          <td>Video</td>
+          <td>4K/120fps</td>
+          <td>4K/60fps</td>
+          <td>1080/120fps</td>
+        </tr>
+        <tr>
+          <td>Transmission Range</td>
+          <td>20 km</td>
+          <td>12 km</td>
+          <td>6 km</td>
+        </tr>
+        <tr>
+          <td>Wind Resistance</td>
+          <td>Level 7 (15 m/s)</td>
+          <td>Level 6 (12 m/s)</td>
+          <td>Level 5 (10 m/s)</td>
+        </tr>
+        <tr>
+          <td>Obstacle Sensing</td>
+          <td>6-Direction</td>
+          <td>4-Direction</td>
+          <td>Forward Only</td>
+        </tr>
+        <tr>
+          <td>ActiveTrack</td>
+          <td><span class="check-yes">6.0</span></td>
+          <td><span class="check-yes">5.0</span></td>
+          <td><span class="check-no">—</span></td>
+        </tr>
+        <tr>
+          <td>Weight</td>
+          <td>895 g</td>
+          <td>249 g</td>
+          <td>325 g</td>
+        </tr>
+        <tr>
+          <td>Price</td>
+          <td>₹1,89,999</td>
+          <td>₹79,999</td>
+          <td>₹59,999</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><a href="#buy" class="btn-buy" style="display:inline-block">Buy Now</a></td>
+          <td><a href="#buy" class="btn-learn" style="display:inline-block">Buy Now</a></td>
+          <td><a href="#buy" class="btn-learn" style="display:inline-block">Buy Now</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══ NEWSLETTER ════════════════════════════════════════════ -->
+<div class="cta-banner">
+  <h2>Be first to know.</h2>
+  <p>Subscribe for exclusive launches, offers, and DRAS pilot stories.</p>
+  <div class="cta-email">
+    <input type="email" placeholder="Enter your email"/>
+    <button type="button">Subscribe</button>
+  </div>
+</div>
+
+<!-- ══ WHERE TO BUY ══════════════════════════════════════════ -->
+<section class="buy-section" id="buy">
+  <div class="buy-inner">
+    <div class="section-eyebrow">Get DRAS</div>
+    <div class="section-title" style="margin-top:12px">Where to Buy</div>
+    <div class="buy-grid">
+      <div class="buy-card">
+        <div class="buy-icon">🌐</div>
+        <div class="buy-title">DRAS Online Store</div>
+        <div class="buy-desc">Order directly from us. Official warranty, secure checkout, and doorstep delivery across India.</div>
+        <a href="#" class="buy-link">Shop Online →</a>
+      </div>
+      <div class="buy-card">
+        <div class="buy-icon">🏪</div>
+        <div class="buy-title">Authorized Retailers</div>
+        <div class="buy-desc">Find a DRAS authorized dealer near you. Experience the hardware in person before you fly.</div>
+        <a href="#" class="buy-link">Find a Store →</a>
+      </div>
+      <div class="buy-card">
+        <div class="buy-icon">📱</div>
+        <div class="buy-title">DRAS App</div>
+        <div class="buy-desc">Download the DRAS app for one-stop flight control, firmware updates, and exclusive member offers.</div>
+        <a href="#" class="buy-link">Download →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<footer id="support">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo-wrap">
+        <img src="logo.png" alt="DRAS" onerror="this.style.display='none'"/>
+        <span class="footer-logo-name">DRAS</span>
+      </div>
+      <div class="footer-tagline">Redefine the Sky.<br>Built in India. Built for the world.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#">DRAS Apex Pro</a></li>
+        <li><a href="#">DRAS Scout</a></li>
+        <li><a href="#">DRAS Storm FPV</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Compare All</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Product Support</a></li>
+        <li><a href="#">Repairs & Service</a></li>
+        <li><a href="#">Downloads & Firmware</a></li>
+        <li><a href="#">DRAS Care Plan</a></li>
+        <li><a href="#">Fly Safe Rules</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">Who We Are</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Media Center</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <ul>
+        <li><a href="#">DRAS Forum</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">Twitter / X</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 DRAS. All Rights Reserved.</div>
+    <div class="footer-socials">
+      <a href="#" title="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="#" title="YouTube">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20.06 12 20.06 12 20.06s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+      </a>
+      <a href="#" title="Twitter">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+      </a>
+    </div>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Cookie Preferences</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+</style>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 30);
+});
+
+// Smooth intersection reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .buy-card, .spec-col').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity .6s ease, transform .6s ease';
+  observer.observe(el);
+});
+
+// Email sub
+document.querySelector('.cta-email button').addEventListener('click', function() {
+  const input = this.previousElementSibling;
+  if (input.value && input.value.includes('@')) {
+    this.textContent = '✓ Subscribed!';
+    this.style.background = '#16a34a';
+    input.value = '';
+    setTimeout(() => { this.textContent = 'Subscribe'; this.style.background = '#000'; }, 3000);
+  } else {
+    input.style.borderColor = '#e63946';
+    setTimeout(() => input.style.borderColor = '#ddd', 2000);
+  }
+});
+</script>
+</body>
+</html>
