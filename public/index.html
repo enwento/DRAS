@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitbit → Apple Health Smart Sync</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 840px; margin: 2rem auto; padding: 0 1rem; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; }
+    button { margin-right: .5rem; padding: .6rem .9rem; border-radius: 8px; border: 1px solid #333; cursor: pointer; }
+    pre { background: #111; color: #0f0; padding: .8rem; overflow: auto; border-radius: 8px; }
+    .muted { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Fitbit → Apple Health Smart Sync</h1>
+  <p class="muted">Deploy on Vercel or run locally. Connect Fitbit, sync your major health metrics, and export Apple Health-compatible XML.</p>
+
+  <div class="card">
+    <h3>1) Connect Fitbit</h3>
+    <button id="connectBtn">Connect Fitbit</button>
+    <button id="disconnectBtn">Disconnect</button>
+  </div>
+
+  <div class="card">
+    <h3>2) Smart Sync</h3>
+    <button id="syncBtn">Sync Now</button>
+    <label><input type="checkbox" id="autoSync"/> Auto sync every 10 minutes</label>
+    <p id="status" class="muted">Not synced yet.</p>
+  </div>
+
+  <div class="card">
+    <h3>3) Apple Health Export</h3>
+    <button id="downloadBtn" disabled>Download export.xml</button>
+    <p class="muted">You can import this into Apple Health using an import workflow on iOS/macOS. ECG is not available from Fitbit public APIs.</p>
+  </div>
+
+  <div class="card">
+    <h3>Last sync payload</h3>
+    <pre id="output">{}</pre>
+  </div>
+
+<script>
+let lastXml = '';
+let intervalId = null;
+
+async function connect() {
+  const r = await fetch('/api/auth-url');
+  const data = await r.json();
+  window.location.href = data.authUrl;
+}
+
+async function disconnect() {
+  await fetch('/api/disconnect', { method: 'POST' });
+  setStatus('Disconnected.');
+}
+
+async function syncNow() {
+  setStatus('Syncing from Fitbit...');
+  const r = await fetch('/api/sync');
+  const data = await r.json();
+
+  if (!r.ok) {
+    setStatus(`Sync failed: ${data.error || 'unknown error'}`);
+    return;
+  }
+
+  lastXml = data.appleHealthXml;
+  document.getElementById('downloadBtn').disabled = false;
+  document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+  setStatus(`Synced at ${new Date(data.syncedAt).toLocaleString()}`);
+}
+
+function downloadXml() {
+  const blob = new Blob([lastXml], { type: 'application/xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `fitbit-apple-health-${new Date().toISOString().slice(0,10)}.xml`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function setStatus(msg) {
+  document.getElementById('status').textContent = msg;
+}
+
+function setAutoSync(enabled) {
+  localStorage.setItem('autoSync', enabled ? '1' : '0');
+  if (intervalId) clearInterval(intervalId);
+  if (enabled) intervalId = setInterval(syncNow, 10 * 60 * 1000);
+}
+
+document.getElementById('connectBtn').onclick = connect;
+document.getElementById('disconnectBtn').onclick = disconnect;
+document.getElementById('syncBtn').onclick = syncNow;
+document.getElementById('downloadBtn').onclick = downloadXml;
+
+document.getElementById('autoSync').addEventListener('change', (e) => setAutoSync(e.target.checked));
+
+const isAuto = localStorage.getItem('autoSync') === '1';
+document.getElementById('autoSync').checked = isAuto;
+setAutoSync(isAuto);
+
+if (new URLSearchParams(window.location.search).get('connected') === '1') {
+  setStatus('Fitbit connected. Ready to sync.');
+}
+</script>
+</body>
+</html>
